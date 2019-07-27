@@ -33,41 +33,102 @@
         </div>
     </div>
 
-    <table class="table is-bordered" id="data">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Team1</th>
-            <th>Team2</th>
-            <th>Venue</th>
-            <th>Toss won by</th>
-            <th>Elected to</th>
-            <th>Result</th>
-            <th>Player of the match</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody id="myTable">
-        {% for match in matches %}
-            <tr>
-                <td>{{ match.match_id }}</td>
-                <td>{{ match.team1 }}</td>
-                <td>{{ match.team2 }}</td>
-                <td>{{ match.venue }}</td>
-                <td>{{ match.toss_winner }}</td>
-                <td>
-                    {% if match.toss_decision == 1 %}
-                        Bat
-                    {% else %}
-                        Field
-                    {% endif %}
-                </td>
-                <td>{{ match.winner }}</td>
-                <td>{{ match.player_of_the_match }}</td>
-                <td><a href="{% url 'match_details' year match.match_id %}">View details</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <ul class="pager" id="myPager"></ul>
+    {% for match in special_matches %}
+        <div class="columns">
+
+            <div class="column is-1"></div>
+            <div class="column">
+                <div class="card is-rounded">
+                    <div class="card-content">
+                        <span class="has-text-grey">
+                            {% if forloop.counter == 1 %}
+                                FINALS
+                            {% elif forloop.counter == 2 %}
+                                QUALIFIER 2
+                            {% elif forloop.counter == 3 %}
+                                ELIMINATOR
+                            {% else %}
+                                QUALIFIER 1
+                            {% endif %}
+                        </span>
+                        <br>
+                        <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a class="tag is-link is-pulled-right" href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
+                        <br>
+                        <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
+                    </div>
+                    <div class="card-footer has-background-grey-lighter">
+                        <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
+                            {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
+                        <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
+                        <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-1"></div>
+        </div>
+    {% endfor %}
+
+    {% for match in matches %}
+        <div class="columns">
+            <div class="column is-1"></div>
+            <div class="column">
+                <div class="card is-rounded">
+                    <div class="card-content">
+                        <span class="has-text-grey">
+                            MATCH {{ forloop.revcounter }}
+                        </span>
+                        <br>
+                        <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a class="tag is-link is-pulled-right" href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
+                        <br>
+                        <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
+                    </div>
+                    <div class="card-footer has-background-grey-lighter">
+                        <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
+                            {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
+                        <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
+                        <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-1"></div>
+        </div>
+    {% endfor %}
+
+{#    <table class="table is-bordered" id="data">#}
+{#        <thead>#}
+{#        <tr>#}
+{#            <th>ID</th>#}
+{#            <th>Team1</th>#}
+{#            <th>Team2</th>#}
+{#            <th>Venue</th>#}
+{#            <th>Toss won by</th>#}
+{#            <th>Elected to</th>#}
+{#            <th>Result</th>#}
+{#            <th>Player of the match</th>#}
+{#            <th></th>#}
+{#        </tr>#}
+{#        </thead>#}
+{#        <tbody id="myTable">#}
+{#        {% for match in matches %}#}
+{#            <tr>#}
+{#                <td>{{ match.match_id }}</td>#}
+{#                <td>{{ match.team1 }}</td>#}
+{#                <td>{{ match.team2 }}</td>#}
+{#                <td>{{ match.venue }}</td>#}
+{#                <td>{{ match.toss_winner }}</td>#}
+{#                <td>#}
+{#                    {% if match.toss_decision == 1 %}#}
+{#                        Bat#}
+{#                    {% else %}#}
+{#                        Field#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#                <td>{{ match.winner }}</td>#}
+{#                <td>{{ match.player_of_the_match }}</td>#}
+{#                <td><a href="{% url 'match_details' year match.match_id %}">View details</a></td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#        </tbody>#}
+{#    </table>#}
+{#    <ul class="pager" id="myPager"></ul>#}
 {% endblock %}

@@ -16,12 +16,16 @@ from iplfreak.forms import LoginForm, SignupForm, UserProfileForm
 def season_details(request, year):
     context = dict()
 
-    matches = Match.objects.filter(season=year)
+    matches = Match.objects.filter(season=year)[::-1]
     seasons = Match.objects.values('season').order_by('-season').distinct()
+    special_matches = matches[:4]
+    matches = matches[4:]
 
     context['matches'] = matches
+    context['special_matches'] = special_matches
     context['seasons'] = seasons
     context['year'] = year
+    context['total_matches'] = len(matches)
 
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
