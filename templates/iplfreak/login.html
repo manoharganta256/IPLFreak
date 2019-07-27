@@ -1,0 +1,39 @@
+{% extends 'iplfreak/base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <div class="columns is-centered" style="margin-top: 1%">
+        <div class="column is-half">
+            <h2 class="heading" style="font-size: 2vw;">Login form</h2>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                 <div class="field">
+                    <label for="" class="label">Username</label>
+                    {{ login_form.username }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Password</label>
+                    {{ login_form.password }}
+                </div>
+                <button type="submit" class="button is-primary">Login</button>
+            </form>
+
+            {% if messages %}
+                <br>
+                {% for message in messages %}
+                    <article class="message is-danger">
+                        <div class="message-header">
+                            <p>{{ message }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% endif %}
+            <hr>
+            <a class="tag is-info is-medium" href="{% url 'signup' %}">Signup here</a>
+        </div>
+    </div>
+{% endblock %}

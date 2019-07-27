@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+
+    {% endblock %}| IPLFreak</title>
+    <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tabs_styles.css' %}">
+</head>
+<body>
+    <nav class="navbar is-transparent is-primary">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'season_details' 2019 %}">
+                <h4 class="subtitle">IPLFreak</h4>
+            </a>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="navbar-end">
+                <h3 class="navbar-item subtitle">User "{{ request.user }}"!</h3>
+            </div>
+
+            <div class="navbar-end">
+                {% block image %}
+
+                {% endblock %}
+                <div class="navbar-item">
+                    <a class="button is-info" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+        {% else %}
+             <div class="navbar-end">
+                <div class="navbar-item">
+                    <a class="button is-info" href="{% url 'login' %}">Login</a>
+                </div>
+            </div>
+        {% endif %}
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+</body>
+<script src="{% static 'js/dropdown-autosubmit.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="{% static 'js/paginate_table.js' %}"></script>
+<script src="{% static 'js/tabs.js' %}"></script>
+</html>

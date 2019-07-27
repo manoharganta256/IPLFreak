@@ -1,0 +1,73 @@
+{% extends 'iplfreak/base.html' %}
+{% block title %}
+    Season {{ year }}
+{% endblock %}
+
+{% block image %}
+    {% if request.user.is_authenticated %}
+        <figure class="image is-64x64">
+            <img class="is-rounded" src="http://127.0.0.1:8000/media/{{ profile_pic }}" alt="Image">
+        </figure>
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="field" style="margin-top: 1%">
+        <div class="control">
+            <div class="select is-primary">
+                <select name="seasons" id="seasons" onchange="autosubmit()">
+                    {% for season in seasons %}
+                        {% if season.season == year %}
+                            <option value="{{ season.season }}" selected>{{ season.season }}</option>
+                        {% else %}
+                            <option value="{{ season.season }}">{{ season.season }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="is-pulled-right">
+                <a class="tag is-primary is-medium" href="{% url 'points_table' year %}">Points Table</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table is-bordered" id="data">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Team1</th>
+            <th>Team2</th>
+            <th>Venue</th>
+            <th>Toss won by</th>
+            <th>Elected to</th>
+            <th>Result</th>
+            <th>Player of the match</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        {% for match in matches %}
+            <tr>
+                <td>{{ match.match_id }}</td>
+                <td>{{ match.team1 }}</td>
+                <td>{{ match.team2 }}</td>
+                <td>{{ match.venue }}</td>
+                <td>{{ match.toss_winner }}</td>
+                <td>
+                    {% if match.toss_decision == 1 %}
+                        Bat
+                    {% else %}
+                        Field
+                    {% endif %}
+                </td>
+                <td>{{ match.winner }}</td>
+                <td>{{ match.player_of_the_match }}</td>
+                <td><a href="{% url 'match_details' year match.match_id %}">View details</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pager" id="myPager"></ul>
+{% endblock %}

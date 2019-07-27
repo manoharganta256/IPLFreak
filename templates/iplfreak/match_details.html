@@ -1,0 +1,167 @@
+{% extends 'iplfreak/base.html' %}
+
+{% block title %}
+    Match {{ match.match_id }}
+{% endblock %}
+
+{% block image %}
+    {% if request.user.is_authenticated %}
+        <figure class="image is-64x64">
+            <img class="is-rounded" src="http://127.0.0.1:8000/media/{{ profile_pic }}" alt="Image">
+        </figure>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h3 class="title">{{ match.team1 }} vs {{ match.team2 }}</h3>
+    <h3 class="subtitle is-4 is-marginless">
+        Toss won by {{ match.toss_winner }} and elected to
+        {% if match.toss_decision == 1 %}
+            Bat
+        {% else %}
+            Field
+        {% endif %}
+    </h3>
+    <h4 class="subtitle is-4 is-marginless">Match won by {{ match.winner }} | Man of the Match : {{ match.player_of_the_match }}</h4>
+    <h4 class="subtitle is-5">Innings Extras: {{ extras }}</h4>
+    <hr>
+    <h3 class="title is-4">Score Card</h3>
+
+    <div class="columns">
+        <div class="column is-half">
+            <h4 class="title is-5">{{ team_1 }}</h4>
+            <h4 class="subtitle">Top Batsmen</h4>
+            <ul class="content">
+                {% for batsman in top_batsmen_1 %}
+                    <li>Name: {{ batsman.batsman }}, Runs: {{ batsman.total }}</li>
+                {% endfor %}
+            </ul>
+            <h4 class="subtitle">Top Bowlers</h4>
+            <ul class="content">
+                {% for bowler in top_bowler_2 %}
+                    <li>Name: {{ bowler.bowler }}, Wickets: {{ bowler.total }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="column is-half">
+            <h4 class="title is-5">{{ team_2 }}</h4>
+            <h4 class="subtitle">Top Batsmen</h4>
+            <ul class="content">
+                {% for batsman in top_batsmen_2 %}
+                    <li>Name: {{ batsman.batsman }}, Runs: {{ batsman.total }}</li>
+                {% endfor %}
+            </ul>
+            <h4 class="subtitle">Top Bowlers</h4>
+            <ul class="content">
+                {% for bowler in top_bowler_1 %}
+                    <li>Name: {{ bowler.bowler }}, Wickets: {{ bowler.total }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'team_1')">{{ team_1 }}</button>
+        <button class="tablinks" onclick="openTab(event, 'team_2')">{{ team_2 }}</button>
+    </div>
+
+    <div id="team_1" class="tabcontent">
+        <table class="table is-bordered">
+            <thead>
+            <tr>
+                <th>Over</th>
+                <th>Ball</th>
+                <th>Batsmen</th>
+                <th>Bowler</th>
+                <th>Runs Scored</th>
+                <th>Player dismissed</th>
+                <th>Dismissal kind</th>
+                <th>Fielder</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for del in team_1_deliveries %}
+                <tr>
+                    <td>{{ del.over }}</td>
+                    <td>{{ del.ball }}</td>
+                    <td>{{ del.batsman }}</td>
+                    <td>{{ del.bowler }}</td>
+                    <td>{{ del.batsman_runs }}</td>
+                    <td>
+                        {% if del.player_dismissed %}
+                            {{ del.player_dismissed }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if del.dismissal_kind %}
+                            {{ del.dismissal_kind }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if del.fielder %}
+                            {{ del.fielder }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="team_2" class="tabcontent">
+        <table class="table is-bordered">
+            <thead>
+            <tr>
+                <th>Over</th>
+                <th>Ball</th>
+                <th>Batsmen</th>
+                <th>Bowler</th>
+                <th>Runs Scored</th>
+                <th>Player dismissed</th>
+                <th>Dismissal kind</th>
+                <th>Fielder</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for del in team_2_deliveries %}
+                <tr>
+                    <td>{{ del.over }}</td>
+                    <td>{{ del.ball }}</td>
+                    <td>{{ del.batsman }}</td>
+                    <td>{{ del.bowler }}</td>
+                    <td>{{ del.batsman_runs }}</td>
+                    <td>
+                        {% if del.player_dismissed %}
+                            {{ del.player_dismissed }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if del.dismissal_kind %}
+                            {{ del.dismissal_kind }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if del.fielder %}
+                            {{ del.fielder }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

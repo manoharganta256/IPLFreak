@@ -1,0 +1,45 @@
+{% extends 'iplfreak/base.html' %}
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+    <div class="columns is-centered" style="margin-top: 1%">
+        <div class="column is-half">
+            <h2 class="heading" style="font-size: 2vw;">Signup form</h2>
+            <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="" class="label">Firstname</label>
+                    {{ signup_form.first_name }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Lastname</label>
+                    {{ signup_form.last_name }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Email</label>
+                    {{ signup_form.email }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Username</label>
+                    {{ signup_form.username }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Password</label>
+                    {{ signup_form.password }}
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Profile Picture</label>
+                    {{ user_profile_form.profile_picture }}
+                </div>
+                <button type="submit" class="button is-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

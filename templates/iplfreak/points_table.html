@@ -1,0 +1,41 @@
+{% extends 'iplfreak/base.html' %}
+
+{% block title %}
+    Points Table {{ year }}
+{% endblock %}
+
+{% block image %}
+    {% if request.user.is_authenticated %}
+        <figure class="image is-64x64">
+            <img class="is-rounded" src="http://127.0.0.1:8000/media/{{ profile_pic }}" alt="Image">
+        </figure>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="columns">
+        <div class="column is-one-quarter"></div>
+        <div class="column is-half">
+            <h1 class="title is-2">Points Table {{ year }}</h1>
+            <table class="table is-bordered is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for team in points_table %}
+                        <tr>
+                            <td>{{ team.winner }}</td>
+                            <td>{{ team.total|add:team.total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="class auto"></div>
+    </div>
+{% endblock %}
