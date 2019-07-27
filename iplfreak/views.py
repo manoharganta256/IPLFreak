@@ -72,7 +72,7 @@ def match_details(request, year, match_id):
 class LoginController(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return HttpResponseRedirect('/seasons/2017/')
+            return HttpResponseRedirect('/seasons/2019/')
 
         login_form = LoginForm()
         return render(request, 'iplfreak/login.html', {
@@ -143,8 +143,23 @@ def logout_user(request):
 
 def points_table(request, year):
     context = dict()
-    context['points_table'] = Match.objects.filter(season=year).values('winner').annotate(
-        total=Count('winner')).order_by('-total')
+    matches = Match.objects.filter(season=year)[::-1][4:] #removed non-league matches
+
+    table = dict()
+    for match in matches:
+        if match.team1 not in table:
+            table[match.team1] = 0
+
+        if match.team2 not in table:
+            table[match.team2] = 0
+
+        if match.result == 'normal':
+            table[match.winner] += 2
+        else:
+            table[match.team1] += 1
+            table[match.team2] += 1
+
+    context['points_table'] = sorted(table.items(), key=lambda x: x[1], reverse=True)
 
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
