@@ -143,7 +143,7 @@ def logout_user(request):
 
 def points_table(request, year):
     context = dict()
-    matches = Match.objects.filter(season=year)[::-1][4:] #removed non-league matches
+    matches = Match.objects.filter(season=year)[::-1][4:] # removed non-league matches
 
     table = dict()
     for match in matches:
