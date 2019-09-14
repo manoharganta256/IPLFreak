@@ -6,7 +6,7 @@
 {% block image %}
     {% if request.user.is_authenticated %}
         <figure class="image is-64x64">
-            <img class="is-rounded" src="http://127.0.0.1:8000/media/{{ profile_pic }}" alt="Image">
+            <img class="is-rounded" src="/media/{{ profile_pic }}" alt="Image">
         </figure>
     {% endif %}
 {% endblock %}
@@ -29,18 +29,33 @@
             </div>
 
             <div class="is-pulled-right">
+                <a class="tag is-primary is-medium" href="{% url 'teams' year %}">Teams</a>
                 <a class="tag is-primary is-medium" href="{% url 'points_table' year %}">Points Table</a>
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <label for="state"><span class="is-size-6">Select Rows</span></label>
+        <div class="select is-small is-link">
+            <select name="state" class="form-control" id="maxRows">
+                 <option value="5000">Show All Rows</option>
+                 <option value="5">5</option>
+                 <option value="10">10</option>
+            </select>
+        </div>
 
-    {% for match in special_matches %}
-        <div class="columns">
+    </div>
+    <table id="table-id" class="table is-fullwidth">
+        <tbody>
+        {% for match in special_matches %}
+        <tr>
+            <td>
+                    <div class="columns">
 
-            <div class="column is-1"></div>
-            <div class="column">
-                <div class="card is-rounded">
-                    <div class="card-content">
+                        <div class="column is-1"></div>
+                        <div class="column">
+                            <div class="card is-rounded">
+                                <div class="card-content">
                         <span class="has-text-grey">
                             {% if forloop.counter == 1 %}
                                 FINALS
@@ -52,46 +67,77 @@
                                 QUALIFIER 1
                             {% endif %}
                         </span>
-                        <br>
-                        <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a class="tag is-link is-pulled-right" href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
-                        <br>
-                        <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
-                    </div>
-                    <div class="card-footer has-background-grey-lighter">
-                        <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
-                            {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
-                        <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
-                        <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
+                            <br>
+                            <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span
+                                    class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a
+                                    class="tag is-link is-pulled-right"
+                                    href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
+                            <br>
+                            <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
+                        </div>
+                        <div class="card-footer has-background-grey-lighter">
+                            <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
+                                {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
+                            <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
+                            <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
+                        </div>
                     </div>
                 </div>
+                <div class="column is-1"></div>
             </div>
-            <div class="column is-1"></div>
-        </div>
-    {% endfor %}
+        </td>
+        </tr>
+        {% endfor %}
+        {% for match in matches %}
+        <tr>
+            <td>
+                    <div class="columns">
+                        <div class="column is-1"></div>
+                        <div class="column">
+                            <div class="card is-rounded">
+                                <div class="card-content">
+                                    <span class="has-text-grey">
+                                        MATCH {{ forloop.revcounter }}
+                                    </span>
+                                    <br>
+                                    <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span
+                                            class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a
+                                            class="tag is-link is-pulled-right"
+                                            href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
+                                    <br>
+                                    <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
+                                </div>
+                                <div class="card-footer has-background-grey-lighter">
+                                    <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
+                                        {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
+                                    <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
+                                    <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-1"></div>
+                    </div>
 
-    {% for match in matches %}
-        <div class="columns">
-            <div class="column is-1"></div>
-            <div class="column">
-                <div class="card is-rounded">
-                    <div class="card-content">
-                        <span class="has-text-grey">
-                            MATCH {{ forloop.revcounter }}
-                        </span>
-                        <br>
-                        <span class="is-size-4"><b class="is-bold">{{ match.team1 }}</b> <span class="has-text-success">vs</span> <b>{{ match.team2 }}</b><a class="tag is-link is-pulled-right" href="{% url 'match_details' year match.match_id %}">View Match details</a></span>
-                        <br>
-                        <span class="has-text-danger">{{ match.winner }} won the match</span> <br>
-                    </div>
-                    <div class="card-footer has-background-grey-lighter">
-                        <h4 class="card-footer-item">{{ match.toss_winner }} Won the toss and chose to
-                            {% if match.toss_decision == 1 %} bat {% else %} field {% endif %} </h4>
-                        <h4 class="card-footer-item"> Venue: {{ match.venue }}</h4>
-                        <h4 class="card-footer-item">Man of the match: {{ match.player_of_the_match }}</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-1"></div>
-        </div>
-    {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!--		Start Pagination -->
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <ul class="pagination pagination-list">
+
+            <li class="pagination-previous" data-page="prev">
+                <span>
+                        <span class="sr-only">Previous
+                </span></span>
+            </li>
+            <!--	Here the JS Function Will Add the Rows -->
+            <li class="pagination-next" data-page="next" id="prev">
+                <span>  <span class="sr-only">Next</span></span>
+            </li>
+        </ul>
+    </nav>
+
+
 {% endblock %}

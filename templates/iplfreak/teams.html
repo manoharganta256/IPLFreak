@@ -1,0 +1,38 @@
+{% extends 'iplfreak/base.html' %}
+
+{% block title %}
+    Teams {{ year }}
+{% endblock %}
+
+{% block image %}
+    {% if request.user.is_authenticated %}
+        <figure class="image is-64x64">
+            <img class="is-rounded" src="/media/{{ profile_pic }}" alt="Image">
+        </figure>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column is-one-quarter"></div>
+        <div class="column is-half">
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th class="title is-4">Teams {{ year }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                        <tr>
+                            <td>{{ team.team1 }}</td>
+                            <td><a class="tag is-link" href="{% url 'team_details' year team.team1 %}">View details</a></td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

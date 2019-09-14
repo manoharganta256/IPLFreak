@@ -7,12 +7,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
+from math import floor
 from iplfreak.models import Match, Deliveries, UserProfile
 from iplfreak.forms import LoginForm, SignupForm, UserProfileForm
 
 
 # Create your views here.
+def index(request):
+    return HttpResponseRedirect('/seasons/2019/')
+
+
 def season_details(request, year):
     context = dict()
 
@@ -167,3 +173,41 @@ def points_table(request, year):
 
     context['year'] = year
     return render(request, 'iplfreak/points_table.html', context)
+
+
+@login_required()
+def teams(request, year):
+    context = dict()
+    context['teams'] = Match.objects.filter(season=year).values('team1').distinct()
+    context['year'] = year
+
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        context['profile_pic'] = user_profile.profile_picture
+
+    return render(request, 'iplfreak/teams.html', context)
+
+
+@login_required()
+def team_details(request, year, team_name):
+    context = dict()
+    context['year'] = year
+    context['team_name'] = team_name
+
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        context['profile_pic'] = user_profile.profile_picture
+
+    played = Match.objects.filter(Q(season=year) & (Q(team1=team_name) | Q(team2=team_name))).count()
+    won = Match.objects.filter(Q(season=year) & Q(winner=team_name)).count()
+
+    context['win_percentage'] = floor((won / played) * 100)
+    context['played'] = played
+    context['won'] = won
+
+    context['best_players'] = Match.objects.filter(Q(season=year) & (Q(winner=team_name))).values('player_of_the_match').annotate(total=Count('player_of_the_match')).order_by('-total')
+    context['recent_matches'] = Match.objects.filter(Q(season=year) & (Q(team1=team_name) | Q(team2=team_name)))[:3]
+    context['best_batsman'] = Deliveries.objects.filter(Q(match_id__season=year) & Q(batting_team=team_name)).values('batsman').annotate(total=Count('batsman_runs')).order_by('-total')[:5]
+    context['best_bowlers'] = Deliveries.objects.filter(Q(match_id__season=year) & Q(bowling_team=team_name)).exclude(player_dismissed__exact='').values('bowler').annotate(total=Count('player_dismissed')).order_by('-total')[:5]
+
+    return render(request, 'iplfreak/team_details.html', context)

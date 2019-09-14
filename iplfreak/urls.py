@@ -8,5 +8,8 @@ urlpatterns = [
     path('seasons/<int:year>/points-table/', views.points_table, name='points_table'),
     path('login/', views.LoginController.as_view(), name='login'),
     path('signup/', views.SignupController.as_view(), name='signup'),
-    path('logout/', views.logout_user, name='logout')
+    path('logout/', views.logout_user, name='logout'),
+    path('', views.index, name='index'),
+    path('teams/<int:year>/', views.teams, name='teams'),
+    path('teams/<int:year>/<str:team_name>', views.team_details, name='team_details')
 ]
