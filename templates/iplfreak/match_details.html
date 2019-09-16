@@ -7,7 +7,7 @@
 {% block image %}
     {% if request.user.is_authenticated %}
         <figure class="image is-64x64">
-            <img class="is-rounded" src=/media/{{ profile_pic }}" alt="Image">
+            <img class="is-rounded" src="/media/{{ profile_pic }}" alt="Image">
         </figure>
     {% endif %}
 {% endblock %}
